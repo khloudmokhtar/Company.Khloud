@@ -1,3 +1,10 @@
+using Company.Khloud.BLL.Interfaces;
+using Company.Khloud.BLL.Repositories;
+using Company.Khloud.DAL.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
+
 namespace Company.Khloud.PL
 {
     public class Program
@@ -8,6 +15,13 @@ namespace Company.Khloud.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews(); //Register Buit-in MVC Services
+            builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); //Allow DI For DepartmentRepository
+            builder.Services.AddDbContext<CompanyDbContext>(options=>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                //options.UseSqlServer(builder.Configuration["DefaultConnection"]);
+
+            }); // Allow DI For CompanyDbContext
 
             var app = builder.Build();
 
