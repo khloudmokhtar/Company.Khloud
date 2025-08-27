@@ -1,0 +1,57 @@
+﻿using Company.Khloud.BLL.Interfaces;
+using Company.Khloud.DAL.Data.Contexts;
+using Company.Khloud.DAL.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Company.Khloud.BLL.Repositories
+{
+    internal class DepartmentRepository : IDepartmentRepository
+    {
+        private readonly CompanyDbContext _Context;//Null
+        public DepartmentRepository()
+        {
+            _Context = new CompanyDbContext();
+        }
+        public IEnumerable<Department> GetAll()
+        {
+           
+            return _Context.Departments.ToList();
+        }
+
+        public Department? Get(int id)
+        {
+           
+            return _Context.Departments.Find(id);
+        }
+        public int Add(Department model)
+        {
+           
+            _Context.Departments.Add(model);
+            return _Context.SaveChanges();
+
+        }
+
+        public int Update(Department model)
+        {
+            
+           _Context.Departments.Update(model);
+            return _Context.SaveChanges();
+        }
+
+        public int Delete(Department model)
+        {
+            _Context.Departments.Remove(model);
+            return _Context.SaveChanges();
+        }
+
+       
+
+       
+
+        
+    }
+}
