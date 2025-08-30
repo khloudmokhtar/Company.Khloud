@@ -25,7 +25,7 @@ namespace Company.Khloud.DAL.Data.Migrations
                     Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    HiringData = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    HiringDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

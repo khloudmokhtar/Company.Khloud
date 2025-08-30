@@ -1,6 +1,7 @@
 using Company.Khloud.BLL.Interfaces;
 using Company.Khloud.BLL.Repositories;
 using Company.Khloud.DAL.Data.Contexts;
+using Microsoft.Build.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +17,7 @@ namespace Company.Khloud.PL
             // Add services to the container.
             builder.Services.AddControllersWithViews(); //Register Buit-in MVC Services
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>(); //Allow DI For DepartmentRepository
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); //Allow DI For EmployeeRepository
             builder.Services.AddDbContext<CompanyDbContext>(options=>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
