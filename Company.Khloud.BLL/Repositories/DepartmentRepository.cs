@@ -9,51 +9,55 @@ using System.Threading.Tasks;
 
 namespace Company.Khloud.BLL.Repositories
 {
-  public class DepartmentRepository : IDepartmentRepository
+  public class DepartmentRepository :GenericRepository<Department>, IDepartmentRepository
     {
-        private readonly CompanyDbContext _Context;//Null
-
-        //Ask CLR Create Object From CompanyDbContext
-        public DepartmentRepository(CompanyDbContext dbContext)
-        {
-            _Context = dbContext;
-        }
-        public IEnumerable<Department> GetAll()
-        {
-           
-            return _Context.Departments.ToList();
-        }
-
-        public Department? Get(int id)
-        {
-           
-            return _Context.Departments.Find(id);
-        }
-        public int Add(Department model)
-        {
-           
-            _Context.Departments.Add(model);
-            return _Context.SaveChanges();
-
-        }
-
-        public int Update(Department model)
+        public DepartmentRepository(CompanyDbContext context) : base(context) //Ask CLR Create Object from CompanyDbContext
         {
             
-           _Context.Departments.Update(model);
-            return _Context.SaveChanges();
         }
+        //private readonly CompanyDbContext _Context;//Null
 
-        public int Delete(Department model)
-        {
-            _Context.Departments.Remove(model);
-            return _Context.SaveChanges();
-        }
+        ////Ask CLR Create Object From CompanyDbContext
+        //public DepartmentRepository(CompanyDbContext dbContext)
+        //{
+        //    _Context = dbContext;
+        //}
+        //public IEnumerable<Department> GetAll()
+        //{
 
-       
+        //    return _Context.Departments.ToList();
+        //}
 
-       
+        //public Department? Get(int id)
+        //{
 
-        
+        //    return _Context.Departments.Find(id);
+        //}
+        //public int Add(Department model)
+        //{
+
+        //    _Context.Departments.Add(model);
+        //    return _Context.SaveChanges();
+
+        //}
+
+        //public int Update(Department model)
+        //{
+
+        //   _Context.Departments.Update(model);
+        //    return _Context.SaveChanges();
+        //}
+
+        //public int Delete(Department model)
+        //{
+        //    _Context.Departments.Remove(model);
+        //    return _Context.SaveChanges();
+        //}
+
+
+
+
+
+
     }
 }

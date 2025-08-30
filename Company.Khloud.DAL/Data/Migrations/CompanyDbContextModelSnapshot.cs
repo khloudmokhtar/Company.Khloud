@@ -68,7 +68,7 @@ namespace Company.Khloud.DAL.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("HiringData")
+                    b.Property<DateTime>("HiringDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
