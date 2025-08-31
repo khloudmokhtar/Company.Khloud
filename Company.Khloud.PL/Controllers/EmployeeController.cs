@@ -75,26 +75,59 @@ namespace Company.Khloud.PL.Controllers
 
         public IActionResult Edit (int? id)
         {
-            return Details(id, "Edit");
+            if (id is null) return BadRequest("Invalid Id"); //400
+            var employee = _employeeRepository.Get(id.Value);
+            if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id{id} is not found" });
+
+            var employeeDto = new CreateEmployeeDto()
+            {
+               
+                Name = employee.Name,
+                Age = employee.Age,
+                Salary = employee.Salary,
+                Email = employee.Email,
+                Address = employee.Address,
+                Phone = employee.Phone,
+                CreateAt = employee.CreateAt,
+                HiringDate = employee.HiringDate,
+                IsActive = employee.IsActive,
+                IsDeleted = employee.IsDeleted
+
+            };
+
+            return View(employeeDto);
+
+          //  return Details(id, "Edit");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit ([FromRoute] int? id, Employee employee)
+        public IActionResult Edit ([FromRoute] int id, CreateEmployeeDto model)
         {
             if (ModelState.IsValid)
             {
-                if (id != employee.Id) return BadRequest();
-                var Count = _employeeRepository.Update(employee);
-                if (Count > 0)
+                var employee = new Employee()
                 {
-                    return RedirectToAction(nameof(Index));
-                }
+                    Id = id,
+                    Name = model.Name,
+                    Age = model.Age,
+                    Salary = model.Salary,
+                    Email = model.Email,
+                    Address = model.Address,
+                    Phone = model.Phone,
+                    CreateAt = model.CreateAt,
+                    HiringDate = model.HiringDate,
+                    IsActive = model.IsActive,
+                    IsDeleted = model.IsDeleted
 
-                
+                };
+
+                var Count = _employeeRepository.Update(employee);
+
+
             }
 
-            return View(employee);
+            return View(model);
         }
 
         [HttpGet]

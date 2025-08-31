@@ -74,44 +74,35 @@ namespace Company.Khloud.PL.Controllers
             //if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id{id} is not found" });
 
 
-            return Details(id,"Edit");
-        }
+            //return Details(id,"Edit");
 
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Department department)
-        {
-            if (ModelState.IsValid)
+
+            if (id is null) return BadRequest("Invalid Id"); //400
+            var department = _departmentRepository.Get(id.Value);
+            if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id{id} is not found" });
+
+            var departmentDto = new CreateDepartmentDto()
             {
-                if (id != department.Id) return BadRequest(); //404
-                var Count = _departmentRepository.Update(department);
-                if (Count > 0)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-            }
+                Code = department.Code,
+                Name = department.Name,
+               CreateAt= department.CreateAt
+               
+            };
+
+            return View(departmentDto);
 
 
-            return View(department);
         }
-
 
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public IActionResult Edit([FromRoute] int id, UpdateDepartmentDto model)
-        //{ 
+        //public IActionResult Edit([FromRoute] int id, Department department)
+        //{
         //    if (ModelState.IsValid)
         //    {
-        //        var department = new Department()
-        //        {
-        //            Id = id,
-        //            Name = model.Name,
-        //            Code = model.Code,
-        //            CreateAt = model.CreateAt
-        //        };
-
+        //        if (id != department.Id) return BadRequest(); //404
         //        var Count = _departmentRepository.Update(department);
         //        if (Count > 0)
         //        {
@@ -120,8 +111,35 @@ namespace Company.Khloud.PL.Controllers
         //    }
 
 
-        // return View(model);
-        // }
+        //    return View(department);
+        //}
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id, UpdateDepartmentDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var department = new Department()
+                {
+                    Id = id,
+                    Name = model.Name,
+                    Code = model.Code,
+                    CreateAt = model.CreateAt
+                };
+
+                var Count = _departmentRepository.Update(department);
+                if (Count > 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+
+            return View(model);
+        }
 
 
         [HttpGet]
