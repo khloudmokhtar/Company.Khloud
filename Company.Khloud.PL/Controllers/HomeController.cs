@@ -1,17 +1,57 @@
 using System.Diagnostics;
+using System.Text;
 using Company.Khloud.PL.Models;
+using Company.Khloud.PL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Company.Khloud.PL.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IScopedService scopedService01;
+        private readonly IScopedService scopedService02;
+        private readonly ITransientService transientService01;
+        private readonly ITransientService transientService02;
+        private readonly ISinglteonService singlteonService01;
+        private readonly ISinglteonService singlteonService02;
 
-        public HomeController(ILogger<HomeController> logger)
+
+
+        public HomeController(ILogger<HomeController> logger,
+            IScopedService scopedService01,
+            IScopedService scopedService02,
+            ITransientService transientService01,
+            ITransientService transientService02,
+            ISinglteonService singlteonService01,
+            ISinglteonService singlteonService02
+            )
         {
             _logger = logger;
+            this.scopedService01 = scopedService01;
+            this.scopedService02 = scopedService02;
+            this.transientService01 = transientService01;
+            this.transientService02 = transientService02;
+            this.singlteonService01 = singlteonService01;
+            this.singlteonService02 = singlteonService02;
         }
+
+        public string TestLifeTime()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.Append($"scopedService01 :: {scopedService01.GetGuid()}\n");
+            builder.Append($"scopedService02 :: {scopedService02.GetGuid()}\n\n");
+            builder.Append($"transientService01 :: {transientService01.GetGuid()}\n");
+            builder.Append($"transientService02 :: {transientService02.GetGuid()}\n\n");
+            builder.Append($"singlteonService01 :: {singlteonService01.GetGuid()}\n");
+            builder.Append($"singlteonService02 :: {singlteonService02.GetGuid()}\n\n");
+
+            return builder.ToString();
+        }
+
 
         public IActionResult Index()
         {

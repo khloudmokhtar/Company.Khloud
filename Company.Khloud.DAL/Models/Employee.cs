@@ -20,6 +20,11 @@ namespace Company.Khloud.DAL.Models
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
 
+        public int? DepartmentId { get; set; } //fk
+        public Department?  Department{ get; set; }
+        public string? ImageName { get; set; }
+        
+
 
     }
 }

@@ -1,4 +1,4 @@
-﻿@model Employee
+﻿@model CreateEmployeeDto
 @{
     ViewData["Title"] = "Delete";
 }
@@ -7,14 +7,18 @@
 <br />
 <br />
 
-<form asp-action="Delete">
+<form asp-action="Delete" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
 
     <partial name="EmployeePartialView/_DetailsDeletePartialView" />
+    <input asp-for="ImageName" hidden />
 
     <div class="my-3">
         <input type="submit" value="Delete" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-light">Back To List</a>
     </div>
 
-
+    
 </form>

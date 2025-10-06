@@ -2,26 +2,32 @@
 using Company.Khloud.BLL.Repositories;
 using Company.Khloud.DAL.Models;
 using Company.Khloud.PL.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using System.Threading.Tasks;
 
 namespace Company.Khloud.PL.Controllers
 {
+
+    [Authorize]
     //MVC Controller
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        // private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         //ask CLR Create Object from DepartmentRepository
-        public DepartmentController(IDepartmentRepository departmentRepository)
+        public DepartmentController(/*IDepartmentRepository departmentRepository*/ IUnitOfWork unitOfWork)
         {
-            _departmentRepository = departmentRepository;
+            // _departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
         }
         [HttpGet] // GET : /Departrment/Index
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //DepartmentRepository departmentRepository = new DepartmentRepository();
-           var departments= _departmentRepository.GetAll();
+            var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
             return View(departments);
         }
 
@@ -32,7 +38,7 @@ namespace Company.Khloud.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDto model)
+        public async Task<IActionResult> Create(CreateDepartmentDto model)
         {
             if (ModelState.IsValid) //Server Side Validation
             {
@@ -44,7 +50,8 @@ namespace Company.Khloud.PL.Controllers
 
                 };
 
-                var Count = _departmentRepository.Add(department);
+                await  _unitOfWork.DepartmentRepository.AddAsync(department);
+                var Count = await _unitOfWork.CompleteAsync();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -56,18 +63,18 @@ namespace Company.Khloud.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id, string ViewName="Details" )
+        public async Task<IActionResult> Details(int? id, string ViewName = "Details")
         {
             if (id is null) return BadRequest("Invalid Id"); //400
-           var department =  _departmentRepository.Get(id.Value);
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(id.Value);
             if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id{id} is not found" });
 
 
-            return View(ViewName,department);
+            return View(ViewName, department);
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             //if (id is null) return BadRequest("Invalid Id"); //400
             //var department = _departmentRepository.Get(id.Value);
@@ -79,15 +86,15 @@ namespace Company.Khloud.PL.Controllers
 
 
             if (id is null) return BadRequest("Invalid Id"); //400
-            var department = _departmentRepository.Get(id.Value);
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(id.Value);
             if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id{id} is not found" });
 
             var departmentDto = new CreateDepartmentDto()
             {
                 Code = department.Code,
                 Name = department.Name,
-               CreateAt= department.CreateAt
-               
+                CreateAt = department.CreateAt
+
             };
 
             return View(departmentDto);
@@ -118,7 +125,7 @@ namespace Company.Khloud.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, UpdateDepartmentDto model)
+        public async Task<IActionResult> Edit([FromRoute] int id, UpdateDepartmentDto model)
         {
             if (ModelState.IsValid)
             {
@@ -130,7 +137,8 @@ namespace Company.Khloud.PL.Controllers
                     CreateAt = model.CreateAt
                 };
 
-                var Count = _departmentRepository.Update(department);
+                _unitOfWork.DepartmentRepository.Update(department);
+                var Count = await _unitOfWork.CompleteAsync();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -143,34 +151,83 @@ namespace Company.Khloud.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            //if (id is null) return BadRequest("Invalid Id"); //400
-            //var department = _departmentRepository.Get(id.Value);
-            //if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id{id} is not found" });
-
-
-            return Details(id,"Delete");
+            if (id is null) return BadRequest("Invalid Id"); //400
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(id.Value);
+            if (department == null) return NotFound(new { StatusCode = 404, Message = $"Department With Id{id} is not found" });
+            return View(department);
         }
 
 
-        [HttpPost]
+        // [HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        // public IActionResult DeleteConfirmed(/*[FromRoute] int id, Department department*/ int id)
+        // {
+        //     if (ModelState.IsValid)
+        //     {
+        //         var department = _unitOfWork.DepartmentRepository.Get(id);
+        //         if (department == null) return NotFound(); //404
+        //        _unitOfWork.DepartmentRepository.Delete(department);
+        //         var Count = _unitOfWork.Complete();
+        //         if (Count > 0)
+        //         {
+        //             return RedirectToAction(nameof(Index));
+        //         }
+        //     }
+
+
+        //     return View(department);
+        // }
+
+
+
+        //    [HttpPost, ActionName("Delete")]
+        //    [ValidateAntiForgeryToken]
+        //    public IActionResult Delete(int id)
+        //    {
+        //        var department = _unitOfWork.DepartmentRepository.Get(id);
+
+        //        if (department == null)
+        //            return NotFound();
+
+        //        _unitOfWork.DepartmentRepository.Delete(department);
+        //        var count = _unitOfWork.Complete();
+
+        //        if (count > 0)
+        //        {
+        //            return RedirectToAction(nameof(Index));
+        //        }
+
+
+
+        //        return View(department);
+        //    }
+
+        //}
+
+
+
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute] int id, Department department)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (ModelState.IsValid)
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(id);
+
+            if (department == null)
+                return NotFound();
+
+            _unitOfWork.DepartmentRepository.Delete(department);
+            var count = await _unitOfWork.CompleteAsync();
+
+            if (count > 0)
             {
-                if (id != department.Id) return BadRequest(); //404
-                var Count = _departmentRepository.Delete(department);
-                if (Count > 0)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+                return RedirectToAction(nameof(Index));
             }
+
 
 
             return View(department);
         }
-
     }
 }

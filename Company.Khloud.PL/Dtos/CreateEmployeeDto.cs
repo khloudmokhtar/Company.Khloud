@@ -1,12 +1,16 @@
-﻿using System.ComponentModel;
+﻿using Company.Khloud.DAL.Models;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Company.Khloud.PL.Dtos
 {
     public class CreateEmployeeDto
     {
+
+        public int Id { get; set; }
+
         [Required (ErrorMessage ="Name Is Required")]
-        public string Name { get; set; }
+        public string EmpName { get; set; }
         [Range(22,60 , ErrorMessage ="Age Must be Between 22  and 60") ]
         public int? Age { get; set; }
         [DataType (DataType.EmailAddress,ErrorMessage ="Email Is not Valid !!")]
@@ -26,6 +30,16 @@ namespace Company.Khloud.PL.Dtos
         public DateTime HiringDate { get; set; }
 
         [DisplayName("Date Of Creation")]
-        public DateTime CreateAt { get; set; }
+        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
+
+        [DisplayName("department")]
+
+        public int? DepartmentId { get; set; } //fk
+
+        public Department? Department { get; set; }
+
+        public string? ImageName { get; set; }
+        public IFormFile? Image { get; set; }
+
     }
 }

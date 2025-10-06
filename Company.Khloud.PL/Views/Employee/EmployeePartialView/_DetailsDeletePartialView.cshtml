@@ -1,7 +1,7 @@
-﻿@model Employee
+﻿@model CreateEmployeeDto
 <div class="my-3">
-    <label asp-for="Name" class="col-form-label"> </label>
-    <input asp-for="Name" class="form-control" readonly />
+    <label asp-for=EmpName" class="col-form-label"> </label>
+    <input asp-for="EmpName" class="form-control" readonly />
 
 </div>
 
@@ -13,36 +13,36 @@
 
 <div class="my-3">
     <label asp-for="Email" class="col-form-label"></label>
-    <input asp-for=" Email" class="form-control" readonly />
+    <input asp-for="Email" class="form-control" readonly />
 
 </div>
 
 <div class="my-3">
     <label asp-for="Address" class="col-form-label"></label>
-    <input asp-for=" Address" class="form-control" readonly />
+    <input asp-for="Address" class="form-control" readonly />
 
 </div>
 
 <div class="my-3">
     <label asp-for="Phone" class="col-form-label"></label>
-    <input asp-for=" Phone" class="form-control" readonly />
+    <input asp-for="Phone" class="form-control" readonly />
 
 </div>
 
 <div class="my-3">
     <label asp-for="Salary" class="col-form-label"></label>
-    <input asp-for=" Salary" class="form-control" readonly />
+    <input asp-for="Salary" class="form-control" readonly />
 
 </div>
 
 <div class="my-3">
-    <input asp-for=" IsActive" class="form-check" disabled />
+    <input asp-for="IsActive" class="form-check" disabled />
     <label asp-for="IsActive" class="col-form-label"></label>
 
 </div>
 
 <div class="my-3">
-    <input asp-for=" IsDeleted" class="form-check" disabled />
+    <input asp-for="IsDeleted" class="form-check" disabled />
     <label asp-for="IsDeleted" class="col-form-label"></label>
 
 </div>
@@ -54,6 +54,19 @@
 
 <div class="my-3">
     <label asp-for="CreateAt" class="col-form-label"></label>
-    <input asp-for=" CreateAt" class="form-control" readonly />
+    <input asp-for="CreateAt" class="form-control" readonly />
 
 </div>
+
+
+<div class="my-3">
+    <label asp-for="Department" class="col-form-label"></label>
+    <input asp-for="Department.Name" class="form-control" readonly />
+
+</div>
+
+<div>
+    <label asp-for="Image" class="col-form-label"></label>
+    <input asp-for=" Image" type="file" class="form-control" />
+</div>
+

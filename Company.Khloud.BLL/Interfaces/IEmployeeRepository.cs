@@ -14,6 +14,9 @@ namespace Company.Khloud.BLL.Interfaces
         //int Add(Employee model);
         //int Update(Employee model);
         //int Delete(Employee model);
+
+
+       Task<List<Employee>> GetByNameAsync(string name);
     }
 }
 

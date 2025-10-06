@@ -7,14 +7,22 @@
 <br />
 <br />
 
-<form asp-action="Delete">
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+
+
+    
+    
 
     <partial name="DepartmentPartialView/_DetailsDeletePartialView" />
+    <input type="hidden" asp-for="Id" />
 
     <div class="my-3">
         <input type="submit" value="Delete" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-light">Back To List</a>
     </div>
 </form>
+
+
+
 
 
